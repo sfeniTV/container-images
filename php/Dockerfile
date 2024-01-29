@@ -14,6 +14,9 @@ RUN docker-php-ext-install mysqli pdo pdo_mysql zip intl
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 #RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
+ADD composer.sh /usr/local/bin/composer.sh
+RUN /usr/local/bin/composer.sh
+
 RUN apt-get update && apt-get install -y git unzip
 
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
@@ -22,7 +25,6 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 RUN a2enmod rewrite headers expires
 
+RUN groupadd -g 1000 app
+RUN useradd -g 1000 -u 1000 -s /bin/bash app
 USER 1000:1000
-
-ADD composer.sh /usr/local/bin/composer.sh
-RUN /usr/local/bin/composer.sh
