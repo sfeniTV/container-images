@@ -26,5 +26,5 @@ RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 RUN a2enmod rewrite headers expires
 
 RUN groupadd -g 1000 app
-RUN useradd -g 1000 -u 1000 -s /bin/bash app
+RUN useradd -g 1000 -u 1000 -s /bin/bash -m app
 USER 1000:1000
